@@ -1,0 +1,11 @@
+desiredDirection = (desiredDirection + Random.insideUnitCircle * wanderStrength).normalized;
+
+Vector2 desiredVelocity = desiredDirection * movementSpeed;
+Vector2 desiredSteeringForce = (desiredVelocity - velocity) * steerStrength;
+Vector2 acceleration = Vector2.ClampMagnitude(desiredSteeringForce, steerStrength) / 1;
+
+velocity = Vector2.ClampMagnitude(velocity + acceleration * Time.deltaTime, movementSpeed);
+position += velocity * movementSpeed * Time.deltaTime;
+
+float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+transform.SetPositionAndRotation(position, Quaternion.Euler(0, 0, angle));
