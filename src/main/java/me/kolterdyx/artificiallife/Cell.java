@@ -13,18 +13,23 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
+import me.kolterdyx.neat.Network;
+import me.kolterdyx.neat.utils.data.Configuration;
 
 public class Cell extends Node implements Control {
 
+    private final Configuration config;
     private HullCollisionShape collisionShape;
 
     public float movementSpeed = 7f;
     public float wanderStrength = 0.1f;
-    public float steerStrength = 20f;
+    public float steerStrength = 5f;
 
     private Vector3f desiredDirection;
     private Vector3f position;
     private Vector3f velocity;
+
+    private Network network;
 
     private static int c=0;
     public Cell(Vector3f position) {
@@ -36,14 +41,20 @@ public class Cell extends Node implements Control {
 
         Geometry geom = new Geometry("box", box);
         Material mat = Main.ASSET_MANAGER.loadMaterial("assets/cell.j3m");
-//        geom.setLocalTranslation(new Vector3f(-500, -50, 50));
-        Texture tex = Main.ASSET_MANAGER.loadTexture("assets/textures/cell.png");
+        Texture tex = mat.getTextureParam("ColorMap").getTextureValue();
         tex.setMagFilter(Texture.MagFilter.Nearest);
         mat.setTexture("ColorMap", tex);
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         geom.setMaterial(mat);
         children.add(geom);
         this.collisionShape = new HullCollisionShape(geom.getMesh());
+
+        config = new Configuration("config.yml");
+        network = new Network(config);
+    }
+
+    private void think(){
+
     }
 
     private void wander(float tpf) {
@@ -62,12 +73,8 @@ public class Cell extends Node implements Control {
             velocity = velocity.normalize().mult(movementSpeed);
         }
         position = position.add(velocity.mult(movementSpeed).mult(tpf));
-//        float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-//        transform.SetPositionAndRotation(position, Quaternion.Euler(0, 0, angle));
-        float angle = (float) (Math.atan2(velocity.y, velocity.x)-Math.PI/2);
+        float angle = (float) (Math.atan2(velocity.y, velocity.x)+Math.PI/2);
         setLocalTranslation(position);
-        System.out.println(velocity);
-        System.out.println(angle);
         setLocalRotation(new Quaternion().fromAngles(0, 0, angle));
         for (Spatial child : children){
             child.setLocalTranslation(position);
@@ -89,11 +96,6 @@ public class Cell extends Node implements Control {
     @Override
     public void update(float tpf){
         wander(tpf);
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

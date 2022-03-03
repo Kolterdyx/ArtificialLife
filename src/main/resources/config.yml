@@ -1,0 +1,35 @@
+network:
+  inputs: 3
+  outputs: 2
+
+  input-activation: "NONE"
+  hidden-activation: "NONE"
+  output-activation: "NONE"
+
+  fill-with-default-value: false
+  default-weight-value: 1
+
+  while-true-timeout: 10000
+
+  debug:
+    graph:
+      display-disabled-links: true
+      display-link-info: false
+      display-node-info: false
+      stylesheet: "graph.css"
+
+  random:
+    use-seed: true
+    seed: 0
+  weight-range: 2
+  bias-range: 10
+  mutation:
+    chance: 1
+    amount: 1
+    weights:
+      weight: 3
+      add-node: 2
+      remove-node: 1
+      add-connection: 4
+      remove-connection: 1
+      bias: 3

@@ -1,0 +1,37 @@
+node {
+    text-size: 12px;
+    text-color: white;
+    text-alignment: center;
+    shape: freeplane;
+    size-mode: fit;
+}
+node.input {
+    fill-color: blue;
+}
+node.output {
+    fill-color: red;
+}
+node.middle {
+    fill-color: gray;
+}
+
+graph {
+    fill-color: #0f0f0f;
+}
+
+edge {
+    fill-color: #909090;
+    shape: freeplane;
+    text-size: 12px;
+    text-color: white;
+    text-alignment: center;
+}
+edge.positive {
+    fill-color: #228a2e;
+}
+edge.negative {
+    fill-color: #821d16;
+}
+edge.disabled {
+    fill-color: rgba(0, 0, 0, 0);
+}

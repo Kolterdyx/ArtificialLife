@@ -80,32 +80,30 @@ public class Main extends SimpleApplication {
     }
 
     private boolean isRunning=true;
-    private final AnalogListener analogListener = new AnalogListener() {
-        @Override
-        public void onAnalog(String name, float value, float tpf) {
-            if (isRunning) {
-                float speed = 1f;
-                if (name.equals("Up")) {
-                    cam.setLocation((Vector3f.UNIT_Y.mult(speed)).add(cam.getLocation()));
+    private final AnalogListener analogListener = (name, value, tpf) -> {
+        if (isRunning) {
+            float speed = 4f;
+            float zoomChange = (Math.abs(cam.getLocation().z)/50)+0.1f;
+            if (name.equals("Up")) {
+                cam.setLocation((Vector3f.UNIT_Y.mult(speed)).add(cam.getLocation()));
+            }
+            if (name.equals("Down")) {
+                cam.setLocation((Vector3f.UNIT_Y.mult(-speed)).add(cam.getLocation()));
+            }
+            if (name.equals("Right")) {
+                cam.setLocation((Vector3f.UNIT_X.mult(-speed)).add(cam.getLocation()));
+            }
+            if (name.equals("Left")) {
+                cam.setLocation((Vector3f.UNIT_X.mult(speed)).add(cam.getLocation()));
+            }
+            if (cam.getLocation().z < -100) {
+                if (name.equals("ScrollUp")) {
+                    cam.setLocation((Vector3f.UNIT_Z.mult(zoomChange).add(cam.getLocation())));
                 }
-                if (name.equals("Down")) {
-                    cam.setLocation((Vector3f.UNIT_Y.mult(-speed)).add(cam.getLocation()));
-                }
-                if (name.equals("Right")) {
-                    cam.setLocation((Vector3f.UNIT_X.mult(-speed)).add(cam.getLocation()));
-                }
-                if (name.equals("Left")) {
-                    cam.setLocation((Vector3f.UNIT_X.mult(speed)).add(cam.getLocation()));
-                }
-                if (cam.getLocation().z < -100) {
-                    if (name.equals("ScrollUp")) {
-                        cam.setLocation((Vector3f.UNIT_Z.mult(speed * 100).add(cam.getLocation())));
-                    }
-                }
-                if (cam.getLocation().z > -4000) {
-                    if (name.equals("ScrollDown")) {
-                        cam.setLocation((Vector3f.UNIT_Z.mult(-speed * 100).add(cam.getLocation())));
-                    }
+            }
+            if (cam.getLocation().z > -4000) {
+                if (name.equals("ScrollDown")) {
+                    cam.setLocation((Vector3f.UNIT_Z.mult(-zoomChange).add(cam.getLocation())));
                 }
             }
         }
